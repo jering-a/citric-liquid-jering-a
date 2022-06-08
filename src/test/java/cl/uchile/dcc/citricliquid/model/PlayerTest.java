@@ -65,6 +65,34 @@ public class PlayerTest {
     Assertions.assertNotSame(expectedSuguri, actualSuguri);
   }
 
+  @Test
+  public void winsTest() {
+    suguri.increaseWinsBy(1);
+    Assertions.assertEquals(1, suguri.getWins());
+    suguri.increaseWinsBy(-1);
+    Assertions.assertEquals(1, suguri.getWins());
+    suguri.increaseWinsBy(98);
+    Assertions.assertEquals(99, suguri.getWins());
+  }
+
+  @Test
+  public void starsTest() {
+    // Increase
+    suguri.increaseStarsBy(1);
+    Assertions.assertEquals(1, suguri.getStars());
+    suguri.increaseStarsBy(-1);
+    Assertions.assertEquals(1, suguri.getStars());
+    suguri.increaseStarsBy(98);
+    Assertions.assertEquals(99, suguri.getStars());
+    // Reduce
+    suguri.reduceStarsBy(1);
+    Assertions.assertEquals(98, suguri.getStars());
+    suguri.reduceStarsBy(98);
+    Assertions.assertEquals(0, suguri.getStars());
+    suguri.reduceStarsBy(1);
+    Assertions.assertEquals(0, suguri.getStars());
+  }
+
   // region : consistency tests
   @RepeatedTest(100)
   public void hitPointsConsistencyTest() {
