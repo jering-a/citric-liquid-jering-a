@@ -15,7 +15,8 @@ public class EncounterPanel extends AbstractPanel {
     /**
      * Creates a new Encounter panel.
      */
-    public EncounterPanel() {
+    public EncounterPanel(int id) {
+        super(id);
     }
 
     /**
@@ -32,6 +33,6 @@ public class EncounterPanel extends AbstractPanel {
      */
     @Override
     public void activate(@NotNull Player player) {
-        System.out.println("Start Wild Battle");
+
     }
 }

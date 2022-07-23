@@ -12,7 +12,8 @@ public class BonusPanel extends AbstractPanel {
     /**
      * Creates a new Bonus panel.
      */
-    public BonusPanel() {
+    public BonusPanel(int id) {
+        super(id);
     }
 
     /**

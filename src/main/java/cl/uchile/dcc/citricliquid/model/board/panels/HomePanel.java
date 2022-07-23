@@ -4,17 +4,20 @@ import cl.uchile.dcc.citricliquid.model.Player;
 import cl.uchile.dcc.citricliquid.model.board.AbstractPanel;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * This class represents a Home Panel in the game 99.7% Citric Liquid.
  */
 public class HomePanel extends AbstractPanel {
-    private final Player owner;
+    private Player owner;
 
     /**
      * Creates a new Home panel.
      */
-    public HomePanel(final Player owner) {
-        this.owner=owner;
+    public HomePanel(int id) {
+        super(id);
+        owner= new Player("const",1,1,1,1);
     }
 
     /**
@@ -22,6 +25,13 @@ public class HomePanel extends AbstractPanel {
      */
     public Player getOwner() {
         return owner;
+    }
+
+    /**
+     * Returns the panel's owner.
+     */
+    public void setOwner(Player player) {
+        owner = player;
     }
 
 
@@ -33,54 +43,50 @@ public class HomePanel extends AbstractPanel {
     @Override
     public void activate(@NotNull Player player) {
         player.setCurrentHp(player.getCurrentHp() + 1);
-        this.normaCheck(player);
+        normaCheck(player);
     }
 
     /**
      * Check that the player meets the requirements.
      *
-     * @param player the player who check.
+     * @param player the player to check.
      */
     public void normaCheck(Player player) {
-        int norma = player.getNormaLevel();
-        int stars= player.getStars();
-        int wins= player.getWins();
-        switch (norma) {
-            case 1:
-                if(stars==10){
-                    player.normaClear();
-                }
-                else{
-                    break;
-                }
-            case 2:
-                if(stars==30 || wins==2){
-                    player.normaClear();
-                }
-                else{
-                    break;
-                }
-            case 3:
-                if(stars==70 || wins==5){
-                    player.normaClear();
-                }
-                else{
-                    break;
-                }
-            case 4:
-                if(stars==120 || wins==9){
-                    player.normaClear();
-                }
-                else{
-                    break;
-                }
-            case 5:
-                if(stars==200 || wins==14){
-                    player.normaClear();
-                }
-                else{
-                    break;
-                }
+        String goal = player.getNormaGoal();
+        if(goal.equals("Stars")){
+            starsCheck(player);
         }
+        else{
+            winsCheck(player);
+        }
+    }
+
+    /**
+     * Check that the player meets the wins requirements.
+     *
+     * @param player the player to check.
+     */
+    private void winsCheck(Player player) {
+        int wins = player.getWins();
+        int norma = player.getNormaLevel();
+        List<Integer> necessaryWins= List.of(0,2, 5, 9, 14);
+        if(wins >= necessaryWins.get(norma - 1)){
+            player.normaClear();
+        }
+    }
+
+    /**
+     * Check that the player meets the stars requirements.
+     *
+     * @param player the player to check.
+     */
+    private void starsCheck(Player player) {
+        int stars= player.getStars();
+        int norma = player.getNormaLevel();
+        List<Integer> necessaryStars= List.of(10,30, 70, 120, 200);
+        if(stars >= necessaryStars.get(norma - 1)){
+            player.normaClear();
+        }
+
     }
 }

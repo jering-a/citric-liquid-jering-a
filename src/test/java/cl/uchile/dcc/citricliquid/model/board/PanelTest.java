@@ -37,18 +37,27 @@ class PanelTest {
   private Chicken chicken;
   private long testSeed;
 
+  private NeutralPanel NP1;
+  private NeutralPanel NP2;
+  private NeutralPanel NP3;
+  private NeutralPanel NP4;
+
   @BeforeEach
   public void setUp() {
     suguri = new Player(PLAYER_NAME, BASE_HP, BASE_ATK, BASE_DEF, BASE_EVD);
     storeManager = new StoreManager();
     chicken = new Chicken();
-    testBonusPanel = new BonusPanel();
-    testBossPanel = new BossPanel(storeManager);
-    testDrawPanel = new DrawPanel();
-    testDropPanel = new DropPanel();
-    testEncounterPanel = new EncounterPanel();
-    testHomePanel = new HomePanel(suguri);
-    testNeutralPanel = new NeutralPanel();
+    testBonusPanel = new BonusPanel(1);
+    testBossPanel = new BossPanel(2);
+    testDrawPanel = new DrawPanel(3);
+    testDropPanel = new DropPanel(4);
+    testEncounterPanel = new EncounterPanel(5);
+    testHomePanel = new HomePanel(6);
+    testNeutralPanel = new NeutralPanel(7);
+    NP1 = new NeutralPanel(20);
+    NP2 = new NeutralPanel(21);
+    NP3 = new NeutralPanel(22);
+    NP4 = new NeutralPanel(23);
     testSeed = new Random().nextLong();
   }
 
@@ -66,8 +75,8 @@ class PanelTest {
   @Test
     public void nextPanelTest() {
       assertTrue(testNeutralPanel.getNextPanels().isEmpty());
-      final var expectedPanel1 = new NeutralPanel();
-      final var expectedPanel2 = new NeutralPanel();
+      final var expectedPanel1 = new NeutralPanel(8);
+      final var expectedPanel2 = new NeutralPanel(9);
 
       testNeutralPanel.addNextPanel(expectedPanel1);
       assertEquals(1, testNeutralPanel.getNextPanels().size());
@@ -78,21 +87,51 @@ class PanelTest {
       testNeutralPanel.addNextPanel(expectedPanel2);
       assertEquals(2, testNeutralPanel.getNextPanels().size());
 
-      assertEquals(Set.of(expectedPanel1, expectedPanel2),
-                   testNeutralPanel.getNextPanels());
-    }
+      assertEquals(Set.of(expectedPanel1, expectedPanel2), testNeutralPanel.getNextPanels());
+
+      NP1.addNextPanel(NP2);
+      NP1.addNextPanel(NP4);
+      NP1.setLeft(NP2);
+      NP1.setUp(NP4);
+      NP2.addNextPanel(NP3);
+      NP2.addNextPanel(NP1);
+      NP2.setUp(NP3);
+      NP2.setRight(NP1);
+      NP3.addNextPanel(NP4);
+      NP3.addNextPanel(NP2);
+      NP3.setRight(NP4);
+      NP3.setDown(NP2);
+      NP4.addNextPanel(NP1);
+      NP4.addNextPanel(NP3);
+      NP4.setDown(NP1);
+      NP4.setLeft(NP3);
+
+      assertEquals(NP1.getLeft(),NP2);
+      assertEquals(NP1.getUp(),NP4);
+      assertEquals(NP2.getRight(),NP1);
+      assertEquals(NP2.getUp(),NP3);
+      assertEquals(NP3.getRight(),NP4);
+      assertEquals(NP3.getDown(),NP2);
+      assertEquals(NP4.getDown(),NP1);
+      assertEquals(NP4.getLeft(),NP3);
+  }
 
   @Test
   public void homePanelTest() {
+    testHomePanel.setOwner(suguri);
     assertEquals(suguri, testHomePanel.getOwner());
+    // Recover 1 HP.
+    suguri.setCurrentHp(1);
+    testHomePanel.activate(suguri);
+    assertEquals(2, suguri.getCurrentHp());
     // To norma 2.
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
+    suguri.setNormaGoal("Wins");
+    suguri.increaseWinsBy(5);
     suguri.increaseStarsBy(10);
     testHomePanel.activate(suguri);
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
     assertEquals(2, suguri.getNormaLevel());
     // To norma 3.
-    assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
+    suguri.setNormaGoal("Stars");
     suguri.increaseStarsBy(20);
     testHomePanel.activate(suguri);
     assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
@@ -110,15 +149,12 @@ class PanelTest {
     assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
     assertEquals(5, suguri.getNormaLevel());
     // To norma 6.
+
     assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
     suguri.increaseStarsBy(80);
     testHomePanel.activate(suguri);
     assertEquals(suguri.getMaxHp(), suguri.getCurrentHp());
     assertEquals(6, suguri.getNormaLevel());
-    // Recover 1 HP.
-    suguri.setCurrentHp(1);
-    testHomePanel.activate(suguri);
-    assertEquals(2, suguri.getCurrentHp());
   }
 
   @Test
@@ -164,6 +200,7 @@ class PanelTest {
 
   @Test
   public void BossTest() {
+    testBossPanel.setBoss(storeManager);
     assertEquals(storeManager, testBossPanel.getBoss());
     final var expectedSuguri = suguri.copy();
     testBossPanel.activate(suguri);

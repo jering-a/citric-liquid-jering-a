@@ -12,7 +12,8 @@ public class DropPanel extends AbstractPanel {
     /**
      * Creates a new Drop panel.
      */
-    public DropPanel() {
+    public DropPanel(int id) {
+        super(id);
     }
 
     /**

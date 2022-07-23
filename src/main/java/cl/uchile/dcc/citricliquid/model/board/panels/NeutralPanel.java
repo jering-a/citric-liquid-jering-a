@@ -12,7 +12,8 @@ public class NeutralPanel extends AbstractPanel {
     /**
      * Creates a new Neutral panel.
      */
-    public NeutralPanel() {
+    public NeutralPanel(int id) {
+        super(id);
     }
 
     /**

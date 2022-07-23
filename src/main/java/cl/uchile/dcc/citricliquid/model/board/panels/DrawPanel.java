@@ -12,7 +12,8 @@ public class DrawPanel extends AbstractPanel {
     /**
      * Creates a new Draw panel.
      */
-    public DrawPanel() {
+    public DrawPanel(int id) {
+        super(id);
     }
 
     /**

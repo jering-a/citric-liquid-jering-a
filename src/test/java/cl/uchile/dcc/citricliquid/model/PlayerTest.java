@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Random;
 
@@ -27,6 +29,9 @@ public class PlayerTest {
   public void constructorTest() {
     final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, -1, 2);
     Assertions.assertEquals(expectedSuguri, suguri);
+    assertFalse(expectedSuguri.isMoving());
+    expectedSuguri.setMoving(true);
+    assertTrue(expectedSuguri.isMoving());
   }
 
   @Test
@@ -45,8 +50,10 @@ public class PlayerTest {
     Assertions.assertEquals(2, suguri.getCurrentHp());
     suguri.setCurrentHp(-1);
     Assertions.assertEquals(0, suguri.getCurrentHp());
+    assertTrue(suguri.isKO());
     suguri.setCurrentHp(5);
     Assertions.assertEquals(4, suguri.getCurrentHp());
+    assertFalse(suguri.isKO());
   }
 
   @Test

@@ -1,11 +1,14 @@
 package cl.uchile.dcc.citricliquid.model;
 
+import cl.uchile.dcc.citricliquid.controller.phases.IPhase;
+import cl.uchile.dcc.citricliquid.controller.phases.exceptions.ActionException;
+
 import java.util.Random;
 
 /**
  * This class represents a fighter in the game 99.7% Citric Liquid.
  */
-public class Fighter implements IFighter{
+public abstract class Fighter implements IFighter{
     private final Random random;
     private final int maxHp;
     private final int atk;
@@ -13,6 +16,7 @@ public class Fighter implements IFighter{
     private final int evd;
     private int stars;
     private int currentHp;
+    protected IPhase state;
 
     /**
      * Creates a new fighter.
@@ -128,6 +132,32 @@ public class Fighter implements IFighter{
     @Override
     public void reduceStarsBy(int amount) {
         stars = Math.max(0, stars - amount);
+    }
+
+    /**
+     * The fighter attacks other fighter
+     *
+     * @param fighter the target
+     * @param atkF the damage of the attack
+     */
+    @Override
+    public void attack(IFighter fighter, int atkF) throws ActionException {
+            fighter.atacado(atkF);
+    }
+
+    /**
+     * the fighter is under attack
+     * @param atkF the dmg that the enemy attacks with
+     */
+    @Override
+    public abstract void atacado(int atkF) throws ActionException;
+
+    /**
+     * Returns if it is alive or not
+     */
+    @Override
+    public boolean isKO(){
+        return this.currentHp == 0;
     }
 
     @Override

@@ -9,13 +9,20 @@ import org.jetbrains.annotations.NotNull;
  * This class represents a Boss Panel in the game 99.7% Citric Liquid.
  */
 public class BossPanel extends AbstractPanel {
-    private final BossUnit boss;
+    private BossUnit boss;
 
     /**
      * Creates a new Boss panel.
      */
-    public BossPanel(BossUnit boss) {
-        this.boss=boss;
+    public BossPanel(int id) {
+        super(id);
+    }
+
+    /**
+     * sets this Panel's Boss.
+     */
+    public void setBoss(BossUnit boss) {
+        this.boss = boss;
     }
 
     /**

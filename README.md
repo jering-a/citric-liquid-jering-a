@@ -32,4 +32,36 @@ AbstractPanel al momento de guardar los paneles siguientes al panel actual, que 
   * Para los paneles ***Home, Bonus, Drop*** este método genera los efectos específicos que tiene cada panel al momento de finalizar el turno (norma check, sumer o quitar estrellas).
   * Para los paneles ***Boss, Draw, Encounter, Neutral*** este método solo printea lo que sucedería, puesto que aún no ha sido implementado. Para algunos se adelantaron métodos que servirán en el futuro.
     
-Cada una de las clases fue documentada, espero no haberme pasado ninguna por alto. Cada método fue testeado con casos borde y de consistencia. 
+-------------- 
+Cambios en tarea 2:
+
+(pre-entrega 1)
+
+Se crearon los estados del juego lo mas atómicos posibles, tomando en cuenta cada uno de los eventos que pueden suceder en un turno de un jugador, inclusive si no está en su propio turno y le toca batallar con otro jugador
+
+Los estados fueron implementados con base al state pattern, y los cambios de estados fueron controlador con excepciones para cambios no permitidos
+
+(pre-entrega 2)
+
+El controlador del juego fue implementado con los métodos básicos pedidos en esta entrega:
+
+* Crear paneles
+* Crear jugadores, wild units y boss units. En el caso de los jugadores, también debe ser capaz de ubicarlos en algún panel.
+*  Asignarle a cada panel uno o más paneles siguientes.
+*  Obtener todos los paneles del tablero.
+*  Saber cuando un jugador gana llegando a la norma máxima
+*  Definir el objetivo para aumentar de norma para un jugador (estrellas o victorias)
+*  Definir el home panel de un jugador
+*  Obtener el capítulo actual del juego
+*  Obtener el jugador que es dueño del turno
+*  Terminar el turno del jugador actual
+*  Realizar un norma check y norma clear cuando un jugador cae en un home panel
+*  Detener el movimiento de un jugador si este:
+    * Pasa por su home panel
+    * Pasa por un panel en el que haya otro jugador
+    * Cae en un panel que tiene más de un panel siguiente
+    
+En específico esta parte fue implementada con Handlers que desencadenaban acciones al ocurrir estos casos especificos para trabajarlos correctamente.
+
+Lamentablemente no me alcanzó el tiempo para tener todos los test necesarios.
+
