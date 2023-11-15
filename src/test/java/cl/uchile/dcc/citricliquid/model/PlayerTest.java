@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Random;
 
@@ -27,6 +29,9 @@ public class PlayerTest {
   public void constructorTest() {
     final var expectedSuguri = new Player(PLAYER_NAME, 4, 1, -1, 2);
     Assertions.assertEquals(expectedSuguri, suguri);
+    assertFalse(expectedSuguri.isMoving());
+    expectedSuguri.setMoving(true);
+    assertTrue(expectedSuguri.isMoving());
   }
 
   @Test
@@ -45,8 +50,10 @@ public class PlayerTest {
     Assertions.assertEquals(2, suguri.getCurrentHp());
     suguri.setCurrentHp(-1);
     Assertions.assertEquals(0, suguri.getCurrentHp());
+    assertTrue(suguri.isKO());
     suguri.setCurrentHp(5);
     Assertions.assertEquals(4, suguri.getCurrentHp());
+    assertFalse(suguri.isKO());
   }
 
   @Test
@@ -63,6 +70,34 @@ public class PlayerTest {
     Assertions.assertEquals(expectedSuguri, actualSuguri);
     // Checks that the copied player doesn't reference the same object
     Assertions.assertNotSame(expectedSuguri, actualSuguri);
+  }
+
+  @Test
+  public void winsTest() {
+    suguri.increaseWinsBy(1);
+    Assertions.assertEquals(1, suguri.getWins());
+    suguri.increaseWinsBy(-1);
+    Assertions.assertEquals(1, suguri.getWins());
+    suguri.increaseWinsBy(98);
+    Assertions.assertEquals(99, suguri.getWins());
+  }
+
+  @Test
+  public void starsTest() {
+    // Increase
+    suguri.increaseStarsBy(1);
+    Assertions.assertEquals(1, suguri.getStars());
+    suguri.increaseStarsBy(-1);
+    Assertions.assertEquals(1, suguri.getStars());
+    suguri.increaseStarsBy(98);
+    Assertions.assertEquals(99, suguri.getStars());
+    // Reduce
+    suguri.reduceStarsBy(1);
+    Assertions.assertEquals(98, suguri.getStars());
+    suguri.reduceStarsBy(98);
+    Assertions.assertEquals(0, suguri.getStars());
+    suguri.reduceStarsBy(1);
+    Assertions.assertEquals(0, suguri.getStars());
   }
 
   // region : consistency tests
